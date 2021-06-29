@@ -16,6 +16,16 @@ const readAll = () => {
   })
 }
 
+const write = (content) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('./simpsons.json', content, (err) => {
+      if(err) reject(err);
+      resolve();
+    })
+  })
+}
+
+
 readAll()
   .then((arr) => {
     arr.forEach((item) => console.log(`${item.id} - ${item.name}`))
@@ -41,11 +51,16 @@ readById('1')
   .then((result) => console.log(`${result.id} - ${result.name}`))
   .catch((err) => console.log(err));
 
-// 4
+// 3
 const changeFile = async () => {
   const fileContent = await readAll();
   const newContent = fileContent.filter((item) => item.id !== '6' && item.id !== '10');
   console.log(newContent);
+
+  write(JSON.stringify(newContent))
+    .then(() => readAll())
+    .then((result) => console.log(result))
+    .catch((err) => console.log(err));
 }
 
 changeFile();
